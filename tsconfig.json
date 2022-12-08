@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "declarationDir": "lib",
+    "declaration": true,
+    "strict": false,
+    "moduleResolution": "Node",
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["index.ts", "utils/**/*"]
+}

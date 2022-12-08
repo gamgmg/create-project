@@ -3,13 +3,13 @@ export default function sortDependencies(packageJson) {
 
   const depTypes = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies']
 
-  for(const depType of Object.keys(depTypes)){
-    if(packageJson[depType]){
+  for (const depType of Object.keys(depTypes)) {
+    if (packageJson[depType]) {
       sortObj[depType] = {}
 
       Object.keys(packageJson[depType])
         .sort()
-        .forEach(name => {
+        .forEach((name) => {
           sortObj[depType][name] = packageJson[depType][name]
         })
     }

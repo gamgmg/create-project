@@ -13,8 +13,8 @@ import getCommand from './utils/getCommand.js'
 
 // const __dirname = dirname(fileURLToPath(import.meta.url))
 
-function canSkipEmptying(dir){
-  if(!fs.existsSync(dir)){
+function canSkipEmptying(dir) {
+  if (!fs.existsSync(dir)) {
     return true
   }
 }
@@ -23,8 +23,17 @@ function isValidPackageName(projectName) {
   return /^(?:@[a-z0-9-*~][a-z0-9-*._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/.test(projectName)
 }
 
-function emptyDir(dir){
-  if(!fs.existsSync(dir)){
+function toValidPackageName(projectName) {
+  return projectName
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/^[._]/, '')
+    .replace(/[^a-z0-9-~]+/g, '-')
+}
+
+function emptyDir(dir) {
+  if (!fs.existsSync(dir)) {
     return
   }
 
@@ -35,11 +44,11 @@ function emptyDir(dir){
   )
 }
 
-async function init(){
+async function init() {
   // 返回当前文件的绝对路径
   const cwd = process.cwd()
   // console.log('init', cwd);
-  
+
   const argv = minimist(process.argv.slice(2), {
     boolean: true
   })
@@ -47,10 +56,16 @@ async function init(){
 
   const forceOverwrite = argv.force
 
-  let targetDir = argv._[0]
+  let targetDir: string = argv._[0]
   const defaultProjectName = targetDir ?? 'new-project'
-  
-  let result = null
+
+  let result: {
+    projectName?: string
+    shouldOverwrite?: boolean
+    packageName?: string
+    templateName?: string
+  } = {}
+
   try {
     result = await prompts(
       [
@@ -66,8 +81,8 @@ async function init(){
           type: 'select',
           message: 'Template name',
           choices: [
-            { title: 'admin-template', description: '后台管理系统模版', value: 'admin-template' },
-          ],
+            { title: 'admin-template', description: '后台管理系统模版', value: 'admin-template' }
+          ]
         },
         {
           name: 'shouldOverwrite',
@@ -75,7 +90,7 @@ async function init(){
           message: () => {
             const dirForPrompt =
               targetDir === '.' ? 'Current directory' : `Target directory "${targetDir}"`
-  
+
             return `${dirForPrompt} is not empty. Remove existing files and continue?`
           }
         },
@@ -94,7 +109,7 @@ async function init(){
           message: 'Package name:',
           initial: () => toValidPackageName(targetDir),
           validate: (dir) => isValidPackageName(dir) || 'Invalid package.json name'
-        },
+        }
       ],
       {
         onCancel: () => {
@@ -113,7 +128,7 @@ async function init(){
     projectName,
     packageName = projectName ?? defaultProjectName,
     templateName,
-    shouldOverwrite = argv.force,
+    shouldOverwrite = argv.force
   } = result
 
   // console.log('projectName', projectName);
@@ -125,9 +140,9 @@ async function init(){
 
   // console.log('root', root);
 
-  if(fs.existsSync(root) && shouldOverwrite){
+  if (fs.existsSync(root) && shouldOverwrite) {
     emptyDir(root)
-  } else if(!fs.existsSync(root)){
+  } else if (!fs.existsSync(root)) {
     fs.mkdirSync(root)
   }
 
