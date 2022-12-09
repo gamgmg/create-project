@@ -1,11 +1,15 @@
 {
-  "name": "create-project",
+  "name": "@gurming/create-project",
   "version": "1.0.0",
   "description": "",
   "type": "module",
   "bin": {
     "create-project": "outfile.cjs"
   },
+  "repository": {
+    "url": "https://github.com/gamgmg/create-project"
+  },
+  "homepage": "https://github.com/gamgmg/create-project",
   "files": [
     "outfile.cjs",
     "template"
@@ -40,5 +44,9 @@
     "*.{js,ts,json}": [
       "prettier --write"
     ]
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }
