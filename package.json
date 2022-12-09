@@ -1,7 +1,7 @@
 {
   "name": "@gurming/create-project",
   "version": "1.0.0",
-  "description": "",
+  "description": "通过选择项目模版快速创建项目",
   "type": "module",
   "bin": {
     "create-project": "outfile.cjs"
